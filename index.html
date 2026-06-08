@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Maze Previewer</title>
+    <style>
+        body { background: #1e1e2e; color: #cdd6f4; font-family: sans-serif; text-align: center; margin: 20px; }
+        .layer-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 20px; }
+        .layer { background: #313244; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .row { display: flex; }
+        .cell { width: 18px; height: 18px; margin: 1px; border-radius: 2px; }
+        .wall { background-color: #11111b; }
+        .path { background-color: #a6e3a1; border: 1px solid rgba(255,255,255,0.05); }
+        h3 { margin: 0 0 10px 0; color: #f5c2e7; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <h1>🛸 3D Procedural Maze Map Previewer</h1>
+    <p>Visualizing architectural grid slices for game engine mesh generation</p>
+    
+    <div class="layer-container" id="container"></div>
+
+    <script>
+        // Self-contained 3D structure map matrix
+        const data = {
+            depth: 3, height: 11, width: 11,
+            grid: [
+                // Layer 1
+                [
+                    ["Path","Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Wall","Path","Path","Path","Wall","Path","Path","Path","Wall"],
+                    ["Wall","Path","Wall","Path","Wall","Path","Wall","Path","Wall","Path","Wall"],
+                    ["Wall","Path","Path","Path","Wall","Path","Path","Path","Wall","Path","Wall"],
+                    ["Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Path","Wall"],
+                    ["Wall","Path","Path","Path","Path","Path","Path","Path","Path","Path","Wall"],
+                    ["Wall","Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Path","Path","Wall","Path","Path","Path","Path","Path","Wall"],
+                    ["Wall","Wall","Wall","Path","Wall","Path","Wall","Wall","Wall","Path","Wall"],
+                    ["Wall","Path","Path","Path","Wall","Path","Path","Path","Wall","Path","Path"],
+                    ["Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"]
+                ],
+                // Layer 2 (Vertical shafts and heavy boundaries)
+                [
+                    ["Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Path","Path","Path","Path","Path","Path","Path","Path","Wall"],
+                    ["Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Wall","Wall","Wall","Wall","Path","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Wall","Wall","Wall","Wall","Path","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Wall","Wall","Wall","Wall","Path","Wall","Wall","Wall","Path","Path"],
+                    ["Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"]
+                ],
+                // Layer 3
+                [
+                    ["Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Path","Path","Wall","Path","Path","Path","Wall","Path","Wall"],
+                    ["Wall","Wall","Wall","Path","Wall","Path","Wall","Path","Wall","Path","Wall"],
+                    ["Wall","Path","Path","Path","Path","Path","Wall","Path","Path","Path","Wall"],
+                    ["Wall","Path","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"],
+                    ["Wall","Path","Path","Path","Path","Path","Path","Path","Path","Path","Wall"],
+                    ["Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Path","Wall"],
+                    ["Wall","Path","Path","Path","Wall","Path","Path","Path","Wall","Path","Wall"],
+                    ["Wall","Path","Wall","Path","Wall","Path","Wall","Path","Wall","Path","Wall"],
+                    ["Wall","Path","Wall","Path","Path","Path","Wall","Path","Path","Path","Path"],
+                    ["Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall","Wall"]
+                ]
+            ]
+        };
+
+        const container = document.getElementById('container');
+        for (let z = 0; z < data.depth; z++) {
+            const layerDiv = document.createElement('div');
+            layerDiv.className = 'layer';
+            layerDiv.innerHTML = `<h3>Floor Level: Layer ${z + 1}</h3>`;
+            
+            for (let y = 0; y < data.height; y++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row';
+                for (let x = 0; x < data.width; x++) {
+                    const cellDiv = document.createElement('div');
+                    cellDiv.className = 'cell ' + (data.grid[z][y][x] === 'Wall' ? 'wall' : 'path');
+                    rowDiv.appendChild(cellDiv);
+                }
+                layerDiv.appendChild(rowDiv);
+            }
+            container.appendChild(layerDiv);
+        }
+    </script>
+</body>
+</html>
